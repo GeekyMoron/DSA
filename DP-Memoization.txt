@@ -1,4 +1,3 @@
-Dynamic Programming -  Memoization : for 0/1 Knapsack 
 class Solution 
 { 
     //Function to return max value that can be put in knapsack of capacity W.
@@ -12,17 +11,17 @@ class Solution
     public static int cal(int W, int wt[], int val[], int n, int t[][])  {
          if(n==0 || W==0)
          return 0;
-         else if(t[n][W] != -1)
+         if(t[n][W] != -1)
          return t[n][W];
          else  {
              if(wt[n-1]>W) {
-                 t[n][W] = knapSack(W,wt,val,n-1);
+                 t[n][W] = cal(W,wt,val,n-1,t);
                  return t[n][W];
              }
              else
              {
-                 int l1 = val[n-1]  + knapSack(W-wt[n-1],wt,val,n-1);
-                 int l2 = knapSack(W,wt,val,n-1);
+                 int l1 = val[n-1]  + cal(W-wt[n-1],wt,val,n-1,t);
+                 int l2 = cal(W,wt,val,n-1,t);
                  if(l1>l2){
                      t[n][W] = l1;
                      return t[n][W];
