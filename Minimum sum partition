@@ -1,0 +1,57 @@
+DP tough Question  : Minimum sum partition https://practice.geeksforgeeks.org/problems/minimum-sum-partition3317/1?utm_source=gfg&utm_medium=article&utm_campaign=bottom_sticky_on_article
+
+Approach range  = sum of all array elements.
+we need to determine S1 and S2 such that their difference can be minimised |S2-S1| - minimised.
+and range - S1 = S2,
+range - 2S1 = minimised.
+
+so we will find all sums such that their are possible in our array and we will get that possible sums by sub set sum problem (kanpsack based)  , the last row of table will give us results for all sums that are possible or not till range,
+then we will be picking only true choices , and since s2-s1> 0 so we will be considering it for range/2 values.
+
+then range/2 -1 element of that array would be maximum , that if sapearted from range it will give us minimum value.
+
+class Solution
+{
+
+	public int minDifference(int nums[], int n) 
+	{ 
+	    int range = 0;
+        for(int i =0;i<nums.length;i++) {
+            range = range + nums[i];
+        }
+        return isSubsetSum(n,nums,range);
+	} 
+	static int isSubsetSum(int N, int arr[], int sum){
+        // code here
+        boolean t[][] = new boolean[N+1][sum+1];
+        for(int i=0;i<=N;i++) {
+            for(int j=0;j<=sum;j++) {
+                if(j==0)
+                t[i][j]=true;
+                if(j==0 && i==0)
+                t[i][j]=true;
+                if(j!=0 && i==0)
+                t[i][j]=false;
+            }
+        }
+        for(int i=1;i<=N;i++) {
+             for(int j=1;j<=sum;j++) {
+                if(arr[i-1]>j)
+                t[i][j] = t[i-1][j];
+                else
+                t[i][j] = t[i-1][j] || t[i-1][j-arr[i-1]];
+             }
+        }
+        int value = -1;
+        for(int k = sum/2; k>=0 ;k--)
+        {
+            if(t[N][k]==true)
+            {
+              value = k;
+              break;
+            }
+        }
+        return sum - 2*value;
+    }
+}
+ 
