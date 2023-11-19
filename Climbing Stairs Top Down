@@ -1,0 +1,21 @@
+DP : Climbing Stairs Top Down 
+class Solution {
+    public int minCostClimbingStairs(int[] cost) {
+       int t[] = new int[cost.length+1];
+       for(int i=0;i<cost.length;i++) {
+           if(i==cost.length)
+           t[i]=0;
+       }
+       for(int i=cost.length-1;i>=0;i--) {
+           if(i+1<=cost.length && i+2<=cost.length)
+           {
+               t[i]= Math.min(cost[i] + t[i+1] , cost[i] + t[i+2]);
+           }
+           else
+           {
+               t[i] = cost[i] + t[i+1];
+           }
+       }
+       return Math.min(t[0],t[1]); 
+    }
+}
