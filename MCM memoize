@@ -1,0 +1,28 @@
+Matrix chain multioplication : https://leetcode.com/discuss/general-discussion/1278305/all-about-matrix-chain-multiplication-easy
+
+class Solution{
+    static int matrixMultiplication(int N, int arr[])
+    {
+       long t[][] = new long[N+1][N+1];
+       Arrays.stream(t).forEach(t1 -> Arrays.fill(t1, -1));
+       return (int) MCM(arr,1,N-1,Long.MAX_VALUE,t);
+    }
+    public static long MCM(int arr[], int i, int j, long min, long[][] t)
+    {
+        if(t[i][j] != -1)
+        return t[i][j];
+        if(i>=j) {
+            t[i][j] = 0;
+            return t[i][j];
+        }
+        else {
+            for(int k=i;k<j;k++) {
+                long temp = MCM(arr,i,k,min,t) + MCM(arr,k+1,j,min,t) + arr[i-1]*arr[j]*arr[k];
+                if(temp<min)
+                min = temp;
+            }
+            t[i][j] = min;
+            return min;
+        }
+    }
+}
