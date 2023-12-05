@@ -1,0 +1,41 @@
+class Solution{
+    static int palindromicPartition(String str)
+    {   
+        int t[][] = new int[str.length()+1][str.length()+1];
+       Arrays.stream(t).forEach(t1 -> Arrays.fill(t1, -1));
+        return MCM(str,0,str.length()-1,Integer.MAX_VALUE,t);
+    }
+    public static int MCM(String s, int i, int j, int min, int[][] t)
+    {
+        if(t[i][j] != -1)
+        return t[i][j];
+        if(i>=j) {
+            t[i][j] = 0;
+            return t[i][j];
+        }
+        if(isPalindrome(s,i,j))
+        {
+            t[i][j] = 0;
+            return t[i][j];
+        }
+        else {
+            for(int k=i;k<j;k++) {
+                int temp = MCM(s,i,k,min,t) + MCM(s,k+1,j,min,t) + 1;
+                if(temp<min) {
+                    min = temp;
+                }
+            }
+            t[i][j] = min;
+            return t[i][j];
+        }
+    }
+    public static boolean isPalindrome(String s, int i, int j) {
+        while(i <= j){
+            if(s.charAt(i) != s.charAt(j))
+                return false;
+            i++;
+            j--;
+        }
+        return true;
+    }
+}
