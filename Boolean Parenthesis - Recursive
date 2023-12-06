@@ -1,0 +1,48 @@
+class Solution{
+    static int countWays(int N, String S){
+        return MCM(S,0,N-1,true);
+    }
+    public static int MCM(String s, int i, int j, boolean isTrue)
+    {
+        if(i>j) {
+            return 0;
+        }
+        if(i==j)
+        {
+           if(isTrue && s.charAt(i)=='T')
+           return 1;
+           else if(!isTrue && s.charAt(i)=='F')
+           return 1;
+           else
+           return 0;
+        }
+        else {
+            int ans = 0;
+            for(int k=i+1;k<j;k = k+2) {
+                int lt = MCM(s,i,k-1,true);
+                int lf = MCM(s,i,k-1,false);
+                int rt = MCM(s,k+1,j,true);
+                int rf = MCM(s,k+1,j,false);
+                if(s.charAt(k) == '^') {
+                    if(isTrue)
+                    ans  = ans + lt*rf + lf*rt;
+                    else 
+                    ans = ans + lt*lt + rf*lf;
+                }
+                else if(s.charAt(k) == '|') {
+                    if(isTrue)
+                    ans  = ans + lt*rf + lf*rt + lt*rt;
+                    else
+                    ans = ans + rf*lf;
+                }
+                else {
+                    if(isTrue)
+                    ans  = ans + lt*rt;
+                    else
+                    ans = ans + lt*rf + lf*rt + lf*rf;
+                }
+            }
+            return ans%1003;
+        }
+    }
+}
