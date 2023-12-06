@@ -1,0 +1,40 @@
+class Solution {
+    static Map<String,Boolean> t = new HashMap<String,Boolean>();
+    public boolean isScramble(String s1, String s2) {
+        if(s1.length()!= s2.length())
+        return false;
+        else{
+        return MCM(s1,s2);
+        }
+    }
+    public static boolean MCM(String s1, String s2)
+    {
+        if(s1.equals(s2)) {
+            return true;
+        }
+        if(s1.length()<=1 || s2.length()<=1)
+        {
+            return false;
+        }
+        else {
+            boolean flag = false;
+            String key = s1 + " " + s2;
+            if(t.containsKey(key))
+            return t.get(key);
+            for(int k=1;k<s1.length();k++) {
+                if(MCM(s1.substring(0,k),s2.substring(s2.length()-k)) == true && 
+                MCM(s1.substring(k),s2.substring(0,s2.length()-k))== true) {
+                flag = true;
+                break;
+                }
+                if(MCM(s1.substring(0,k),s2.substring(0,k)) == true && 
+                MCM(s1.substring(k),s2.substring(k,s2.length())) == true) {
+                flag = true;
+                break;
+                }
+            }
+            t.put(key,flag);
+            return flag;
+        }
+    }
+}
