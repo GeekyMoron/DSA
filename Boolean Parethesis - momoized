@@ -1,0 +1,91 @@
+Boolean Parethesis - momoized 
+class Solution{
+    static Map<String,Integer> mp=new HashMap<>();
+    static int countWays(int N, String S){
+        // code here
+        char s[]=S.toCharArray();
+        mp.clear();
+        int result=solve(s,0,N-1,true);
+        return result;
+    }
+    
+    static int solve(char s[],int i, int j, boolean isTrue){
+        //Base Condition
+        if(i>j)
+            return 0;
+        
+        if(i==j){
+            if(isTrue){
+                return s[i]=='T'?1:0;
+            }
+            else{
+                return s[i]=='F'?1:0;
+            }
+        }
+        //Memoization
+        String key=i+""+j+""+isTrue;
+        if(mp.containsKey(key))
+            return mp.get(key);
+        //K-loop
+        int ans=0;
+        for(int k=i+1;k<=j-1;k=k+2){
+            int lt=0;
+            int lf=0;
+            int rt=0;
+            int rf=0;
+            
+            
+            String ltk=i+""+(k-1)+""+true;
+            String lfk=i+""+(k-1)+""+false;
+            String rtk=(k+1)+""+j+""+true;
+            String rfk=(k+1)+""+j+""+false;
+            
+            if(mp.containsKey(ltk))
+                lt=mp.get(ltk);
+            else
+                lt=solve(s,i,k-1,true);
+                
+            if(mp.containsKey(lfk))
+                lf=mp.get(lfk);
+            else
+                lf=solve(s,i,k-1,false);
+                
+            if(mp.containsKey(rtk))
+                rt=mp.get(rtk);
+            else
+                rt=solve(s,k+1,j,true);
+            
+            if(mp.containsKey(rfk))
+                rf=mp.get(rfk);
+            else
+                rf=solve(s,k+1,j,false);
+            
+            if(s[k]=='&'){
+                if(isTrue){
+                    ans+=lt*rt;
+                }
+                else{
+                    ans+=lt*rf+lf*rt+lf*rf;
+                }
+            }
+            else if(s[k]=='|'){
+                if(isTrue){
+                    ans+=lt*rt+lf*rt+lt*rf;
+                }
+                else{
+                    ans+=lf*rf;
+                }
+            }
+            else if(s[k]=='^'){
+                if(isTrue){
+                    ans+=lt*rf+lf*rt;
+                }
+                else{
+                    ans+=lt*rt+lf*rf;
+                }
+            }
+        }
+        mp.put(key,ans%1003);
+        return ans%1003;
+    }
+}
