@@ -1,0 +1,20 @@
+Daimeter of tree ; where we are considering that the height od binary tree is no of nodes from a root to leaf
+
+class Solution {
+    int max = Integer.MIN_VALUE;
+    public int diameterOfBinaryTree(TreeNode root) {
+        int t = diameter(root);
+        return max-1;
+    }
+    public int diameter(TreeNode root)  {
+        if(root==null)
+            return 0;
+        int l = diameter(root.left);
+        int r = diameter(root.right);
+        int self = l+r+1;
+        int temp = Math.max(l,r) +1;
+        int ans = Math.max(self,temp);
+        max = Math.max(max,ans);
+        return temp;
+    }
+}
