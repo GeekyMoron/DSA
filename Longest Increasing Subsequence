@@ -1,0 +1,46 @@
+Intuition
+Convert this question to Longest common subsequence.
+
+Approach
+Convert our Array to another array containing unique sorted elements of its element
+forex : for [10,9,2,5,3,7,101,18] create on array [2,5,3,7,9,18,101] and find LCS you get longest increasing subsequence as longest subsequesnce would be longest inceasing one
+
+Complexity
+Time complexity:
+n^2
+
+Space complexity:
+
+Code
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        Set<Integer> h = new HashSet<>();
+        for(int i = 0;i<nums.length;i++) {
+            h.add(nums[i]);
+        }
+        int[] rev = new int[h.size()];
+        int k = 0;
+        for(int value : h){
+           rev[k++] = value;
+        }
+        Arrays.sort(rev);
+        int n = nums.length;
+        int m = rev.length;
+        int t[][] = new int[n+1][m+1];
+        for(int i =0;i<=n;i++) {
+        for(int j =0;j<=m;j++) {
+            if(i==0||j==0)
+             t[i][j] = 0;
+        }
+        }
+        for(int i =1;i<=n;i++) {
+        for(int j =1;j<=m;j++) {
+            if(nums[i-1] == rev[j-1])
+            t[i][j] = 1 + t[i-1][j-1];
+            else
+            t[i][j] = Math.max(t[i][j-1],t[i-1][j]);
+        }
+        }
+        return t[n][m];
+    }
+}
