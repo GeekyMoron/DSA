@@ -1,0 +1,67 @@
+Largest Rectangle in Histogram - width will be nearest smallest from right - nearest smallest from left -1 , and -1 is going to be pseudo index for NSL and height.length for NSR
+
+import java.util.*;
+class Pair {
+    int height;
+    int position;
+    Pair(int height,int position) {
+        this.height = height;
+        this.position = position;
+    }
+}
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+        Stack<Pair> s = new Stack<Pair>();
+        int max = Integer.MIN_VALUE;
+        int result[] = new int[heights.length];
+        int left[] = new int[heights.length];
+        int right[] = new int[heights.length];
+        for(int i=heights.length-1;i>=0;i--) {
+            if(s.size()==0) {
+               right[i] = heights.length;
+            }
+            else if(s.peek().height<heights[i])
+            {
+                right[i] = s.peek().position;
+            }
+            else {
+                while(s.size()>0 && s.peek().height>=heights[i])
+                {
+                    s.pop();
+                }
+                if(s.size()==0)
+                right[i] =heights.length;
+                else
+                right[i] = s.peek().position;
+            }
+            s.push(new Pair(heights[i],i));
+        }
+        s.clear();
+        for(int i=0;i<heights.length;i++) {
+            if(s.size()==0) {
+               left[i] = -1;
+            }
+            else if(s.peek().height<heights[i])
+            {
+                left[i] = s.peek().position;
+            }
+            else {
+                while(s.size()>0 && s.peek().height>=heights[i])
+                {
+                    s.pop();
+                }
+                if(s.size()==0)
+                left[i] =-1;
+                else
+                left[i] = s.peek().position;
+            }
+            s.push(new Pair(heights[i],i));
+        }
+        for(int j =0;j<left.length;j++) {
+            int w = right[j] - left[j] -1;
+            int area = heights[j] * w;
+            max = area>max ? area : max;
+        }
+        return max;
+    }
+}
