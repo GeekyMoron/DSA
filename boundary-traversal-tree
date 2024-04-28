@@ -1,0 +1,61 @@
+class Solution
+{
+	ArrayList <Integer> boundary(Node node)
+	{
+	    ArrayList<Integer> ans = new ArrayList<Integer>();
+	    if(node == null)
+	    return ans;
+	    if(node.left == null && node.right == null)
+	    {
+	        ans.add(node.data);
+	        return ans;
+	    }
+	    leftTraversal(node,ans);
+	    //System.out.println(ans);
+	    dfs(node,ans);
+	    //System.out.println(ans);
+	    ArrayList<Integer> right = new ArrayList<Integer>();
+	    rightTraversal(node.right,right);
+	    Collections.reverse(right);
+	    ans.addAll(right);
+	    return ans;
+	}
+	void leftTraversal(Node node,ArrayList<Integer> s) {
+	    if(node == null) {
+	        return;
+	    }
+	    if(node.left == null && node.right == null)
+	    return;
+	    
+	    s.add(node.data);
+	    
+	    if(node.left != null)
+	    leftTraversal(node.left,s);
+	    else  if(s.size()>1){
+        leftTraversal(node.right, s);
+         }
+	}
+	void dfs(Node node,ArrayList<Integer> s) {
+	    if(node == null) {
+	        return;
+	    }
+	    if(node.left == null && node.right == null) {
+	        s.add(node.data);
+	        return;
+	    }
+	    dfs(node.left,s);
+	    dfs(node.right,s);
+	}
+	void rightTraversal(Node node,ArrayList<Integer> s) {
+	    if(node == null) {
+	        return;
+	    }
+	    if(node.left == null && node.right == null)
+	    return;
+	    s.add(node.data);
+	    if(node.right == null)
+	    rightTraversal(node.left,s);
+	    else
+	    rightTraversal(node.right,s);
+	}
+}
