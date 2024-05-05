@@ -1,0 +1,49 @@
+class Pair {
+    TreeNode value;
+    int axis;
+    int level;
+    Pair(TreeNode value, int axis, int level) {
+        this.value = value;
+        this.axis = axis;
+        this.level = level;
+    }
+}
+class Solution {
+    public List<List<Integer>> verticalTraversal(TreeNode root) {
+        List<List<Integer>> ans = new ArrayList<List<Integer>>();
+        if(root == null)
+        return ans;
+        TreeMap<Integer,TreeMap<Integer,PriorityQueue<Integer>>> map = 
+        new TreeMap<Integer,TreeMap<Integer,PriorityQueue<Integer>>>();
+        Queue<Pair> queue = new LinkedList<Pair>();
+        queue.add(new Pair(root,0,0));
+        while(queue.size()>0)
+         {
+            int size = queue.size();
+            for(int i=0;i<size;i++) {
+                Pair val = queue.poll();
+                if(!map.containsKey(val.axis))
+                map.put(val.axis,new TreeMap<Integer,PriorityQueue<Integer>>());
+                if(!map.get(val.axis).containsKey(val.level))
+                map.get(val.axis).put(val.level, new PriorityQueue<Integer>());
+                map.get(val.axis).get(val.level).add(val.value.val);
+                if(val.value.left!=null)
+                queue.add(new Pair(val.value.left,val.axis-1,val.level+1));
+                if(val.value.right!=null)
+                queue.add(new Pair(val.value.right,val.axis+1,val.level+1));
+                // queue.forEach(v -> System.out.println(v.value.val));
+            }
+         }
+
+         map.forEach((k,v) -> {
+            List<Integer> ls = new ArrayList<Integer>();
+            v.forEach((k1,v1) -> {
+                while(v1.size()>0) {
+                  ls.add(v1.remove());
+                }
+            });
+            ans.add(ls);
+         });
+         return ans;
+    }
+}
