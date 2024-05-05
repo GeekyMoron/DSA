@@ -1,0 +1,41 @@
+class Pair {
+    Node node;
+    int axis;
+    Pair(Node node, int axis) {
+        this.node = node;
+        this.axis = axis;
+    }
+}
+class Solution
+{
+    //Function to return a list of nodes visible from the top view 
+    //from left to right in Binary Tree.
+    static ArrayList<Integer> topView(Node root)
+    {
+        // add your code
+        ArrayList<Integer> ans = new ArrayList<Integer>();
+        if(root == null)
+        return ans;
+        Queue<Pair> queue = new LinkedList<Pair>();
+        queue.add(new Pair(root,0));
+        TreeMap<Integer,Integer> map = new TreeMap<Integer,Integer>();
+        while(queue.size()>0) {
+            int size = queue.size();
+            for(int i=0;i<size;i++) {
+                Pair d = queue.poll();
+                //System.out.println(d.node.data);
+                if(!map.containsKey(d.axis))
+                map.put(d.axis,d.node.data);
+                if(d.node.left!=null)
+                queue.add(new Pair(d.node.left,d.axis-1));
+                if(d.node.right!=null)
+                queue.add(new Pair(d.node.right,d.axis+1));
+            }
+        }
+        map.forEach((k,v) -> {
+            ans.add(v);
+        });
+        //Collections.reverse(ans);
+        return ans;
+    }
+}
