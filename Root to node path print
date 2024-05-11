@@ -1,0 +1,23 @@
+public class Solution {
+    public ArrayList<Integer> solve(TreeNode A, int B) {
+        ArrayList<Integer> ans = new ArrayList<Integer>();
+        if(A== null)
+        return ans;
+        get(A,B,ans);
+        return ans;
+    }
+    
+    public boolean get(TreeNode A, int B, List<Integer> ans) {
+        if(A== null || A.val == -1)
+        return false;
+        ans.add(A.val);
+        if(A.val == B)
+        return true;
+        if(get(A.left,B,ans)||get(A.right,B,ans))
+        return true;
+        else {
+            ans.remove(ans.size()-1);
+            return false;
+        }
+    }
+}
