@@ -1,0 +1,65 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    TreeNode target = null;
+    public int amountOfTime(TreeNode root, int start) {
+        List<Integer> ans = new ArrayList<Integer>();
+        Map<TreeNode,TreeNode> hs = new HashMap<TreeNode,TreeNode>();
+        dfs(root,hs,new TreeNode(-1),start);
+        Queue<TreeNode> q = new LinkedList<TreeNode>();
+        q.add(target);
+        Set<TreeNode> poped = new HashSet<TreeNode>();
+        int k =0;
+        poped.add(target);
+        while(q.size()>0) {
+            int size = q.size();
+            int flag = 0;
+            for(int i=0;i<size;i++) {
+                TreeNode cur = q.poll();
+                poped.add(cur);
+                if(cur.left!=null && !poped.contains(cur.left)) {
+                 q.add(cur.left);
+                 flag = 1;
+                 poped.add(cur.left);
+                }
+                if(cur.right!=null && !poped.contains(cur.right)) {
+                 q.add(cur.right);
+                 poped.add(cur.right);
+                 flag = 1;
+                }
+                if(hs.get(cur).val !=-1 && !poped.contains(hs.get(cur))) {
+                 q.add(hs.get(cur));
+                 poped.add(hs.get(cur));
+                 flag = 1;
+                }
+            }
+            k = flag ==1 ? k+1 : k;
+        }
+        return k;
+    }
+    public void dfs(TreeNode node, Map<TreeNode,TreeNode> map, TreeNode parent, int data) {
+        if(node == null )
+        return;
+        else {
+           if(node.val == data) {
+             target = node;
+           }
+           map.put(node,parent);
+           dfs(node.left, map, node, data);
+           dfs(node.right, map,node, data);
+        }
+    }
+}
